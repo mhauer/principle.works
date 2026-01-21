@@ -4,6 +4,29 @@ import "./globals.css";
 export const metadata: Metadata = {
   title: "Principle",
   description: "Principle",
+  metadataBase: new URL('https://principle.works'),
+  openGraph: {
+    title: "Principle",
+    description: "Principle",
+    url: 'https://principle.works',
+    siteName: 'Principle',
+    images: [
+      {
+        url: '/og-image.png',
+        width: 1200,
+        height: 630,
+        alt: 'Principle',
+      },
+    ],
+    locale: 'en_US',
+    type: 'website',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: "Principle",
+    description: "Principle",
+    images: ['/twitter-image.png'],
+  },
   icons: {
     icon: [
       { url: '/icons/icon16.png', sizes: '16x16', type: 'image/png' },
