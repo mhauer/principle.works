@@ -23,24 +23,26 @@ export default function AnimatedLogo() {
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
   const [interactionEnabled, setInteractionEnabled] = useState(false);
   const [isDarkMode, setIsDarkMode] = useState(false);
+  const containerRef = useState<HTMLDivElement | null>(null)[0];
 
   useEffect(() => {
-    // Set initial dimensions
-    setDimensions({
-      width: window.innerWidth,
-      height: window.innerHeight
-    });
+    // Use fixed container dimensions
+    const updateDimensions = () => {
+      setDimensions({
+        width: window.innerWidth,
+        height: 100 // Fixed 100px height
+      });
+    };
 
-    // Check initial color scheme
+    updateDimensions();
+
+    // Check system color scheme preference
     const darkModeQuery = window.matchMedia('(prefers-color-scheme: dark)');
     setIsDarkMode(darkModeQuery.matches);
 
     // Update dimensions on resize
     const handleResize = () => {
-      setDimensions({
-        width: window.innerWidth,
-        height: window.innerHeight
-      });
+      updateDimensions();
     };
 
     // Listen for color scheme changes
@@ -131,8 +133,9 @@ export default function AnimatedLogo() {
     }
 
     // Calculate center position for logo (in viewport coordinates)
-    // Scale logo to 50% of original size
-    const logoScale = 0.5;
+    // Scale logo so the letters are roughly 50px height
+    const targetLogoHeight = 108;
+    const logoScale = targetLogoHeight / 256;
     const logoWidth = 512 * logoScale;
     const logoHeight = 256 * logoScale;
     const centerX = dimensions.width / 2;
@@ -169,7 +172,7 @@ export default function AnimatedLogo() {
         controlY1,
         controlX2,
         controlY2,
-        delay: Math.random() * 1.5,
+        delay: Math.random() * 0.3, // Reduced from 1.5 for faster animation
       });
     }
 
@@ -178,7 +181,7 @@ export default function AnimatedLogo() {
     // Enable interaction after particles have settled
     const timer = setTimeout(() => {
       setInteractionEnabled(true);
-    }, 5000); // 3.5s animation + 1.5s buffer
+    }, 1500); // 1.0s animation + 0.5s buffer
 
     return () => clearTimeout(timer);
   }, [dimensions]);
@@ -195,8 +198,8 @@ export default function AnimatedLogo() {
 
   return (
     <div
-      className="relative w-screen h-screen"
-      style={{ backgroundColor: isDarkMode ? '#000000' : '#ffffff' }}
+      className="absolute inset-0 w-full h-full"
+      style={{ backgroundColor: isDarkMode ? '#0a0a0a' : '#ffffff' }}
       onMouseMove={handleMouseMove}
       onTouchMove={handleTouchMove}
     >
@@ -282,7 +285,7 @@ export default function AnimatedLogo() {
                   damping: 25,
                   mass: 0.5
                 } : {
-                  duration: 3.5,
+                  duration: 1.0, // Reduced from 3.5 for faster animation
                   delay: particle.delay,
                   times: [0, 0.33, 0.66, 1],
                   ease: "easeInOut",
@@ -293,19 +296,19 @@ export default function AnimatedLogo() {
                   damping: 25,
                   mass: 0.5
                 } : {
-                  duration: 3.5,
+                  duration: 1.0, // Reduced from 3.5 for faster animation
                   delay: particle.delay,
                   times: [0, 0.33, 0.66, 1],
                   ease: "easeInOut",
                 },
                 fill: {
-                  duration: 3.5,
+                  duration: 1.0, // Reduced from 3.5 for faster animation
                   delay: particle.delay,
                   times: [0, 0.33, 0.66, 1],
                   ease: "easeInOut",
                 },
                 opacity: {
-                  duration: 3.5,
+                  duration: 1.0, // Reduced from 3.5 for faster animation
                   delay: particle.delay,
                   times: [0, 0.33, 0.66, 1],
                   ease: "easeInOut",
@@ -319,14 +322,14 @@ export default function AnimatedLogo() {
                     attributeName="cx"
                     values={`${particle.endX};${breatheOutX};${breatheInX};${particle.endX}`}
                     dur="3s"
-                    begin={`${3.5 + particle.delay}s`}
+                    begin={`${1.0 + particle.delay}s`}
                     repeatCount="indefinite"
                   />
                   <animate
                     attributeName="cy"
                     values={`${particle.endY};${breatheOutY};${breatheInY};${particle.endY}`}
                     dur="3s"
-                    begin={`${3.5 + particle.delay}s`}
+                    begin={`${1.0 + particle.delay}s`}
                     repeatCount="indefinite"
                   />
                 </>
